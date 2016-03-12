@@ -1,101 +1,58 @@
 //
-//  DataManager.swift
+//  DataRequester.swift
 //  APWeather
 //
-//  Created by Abrar Peer on 8/03/2016.
+//  Created by Abrar Peer on 11/03/2016.
 //  Copyright © 2016 peerlabs. All rights reserved.
 //
 
 import Foundation
 
-public class APWDataManager : NSObject {
+public class DataRequester : NSObject {
     
+    public var requestUrlString = "https://dnu5embx6omws.cloudfront.net/venues/weather.json"
     
-    public var filePath : String? {
+    public var requestURL : NSURL? {
         
         get {
             
-            return NSBundle.mainBundle().pathForResource("data", ofType:"json")
+            return NSURL(string: self.requestUrlString)
             
         }
         
     }
-    
-    public var urlString = "https://dnu5embx6omws.cloudfront.net/venues/weather.json"
-    
-    public var url : NSURL? {
-        
-        get {
-            
-           return NSURL(string: self.urlString)
-            
-        }
 
-    }
+    public var lastRequestedDate : NSDate?
     
-    public var error : NSError?
+    private var venues : [Venue]
     
-    public var venues : [Venue]
     
-    public var lastRefreshedDate : NSDate?
+    // MARK - Initialiser
     
     override init() {
         
+        
+        lastRequestedDate = nil
         venues = [Venue]()
         
-        error = nil
-        
-        lastRefreshedDate = nil
+        super.init()
         
     }
     
-    public class var sharedInstance: APWDataManager {
+    func requestData() {
         
-        struct Singleton {
+        let urlRequest = NSMutableURLRequest(URL: requestURL!)
+        
+        let session = NSURLSession.sharedSession()
+        
+        let task = session.dataTaskWithRequest(urlRequest) { (data, response, error) -> Void in
             
-            static let instance = APWDataManager()
+            let httpResponse = response as! NSHTTPURLResponse
+            let statusCode = httpResponse.statusCode
             
-        }
-        
-        return Singleton.instance
-        
-    }
-    
-    public func requestData() {
-        
-        if (self.url != nil) {
-            
-            loadDataFromURL(self.url!) { (data, error) -> Void in
+            if (statusCode == 200) {
                 
-                if (data != nil) {
-                    
-                    do {
-                  
-                        _ = try data?.writeToFile(self.filePath!, options: NSDataWritingOptions.DataWritingAtomic)
-                        
-                    } catch _ {
-                        
-                        self.error = NSError(domain:"APWDataManger", code:100, userInfo:[NSLocalizedDescriptionKey : "Error Trying to write to file"])
-                        
-                    }
-                    
-                } else {
-                    
-                    self.error = error
-                    
-                }
-                
-            }
-            
-            
-            self.lastRefreshedDate = NSDate()
-
-        }
-        
-        if (self.error != nil) {
-            
-            getDataFromFileWithSuccess { (data) -> Void in
-                
+                print("Everyone is fine, file downloaded successfully.")
                 
                 typealias Payload = [String: AnyObject]
                 typealias PayloadData = [AnyObject]
@@ -103,8 +60,8 @@ public class APWDataManager : NSObject {
                 var json : Payload!
                 
                 do {
-
-                    json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions()) as? Payload
+                    
+                    json = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions()) as? Payload
                     
                     if let dataObjects = json["data"] as? PayloadData {
                         
@@ -115,6 +72,9 @@ public class APWDataManager : NSObject {
                         self.venues.removeAll()
                         
                         for object in dataObjects {
+                            
+                            
+                            print("Processing Object: \(object)")
                             
                             
                             guard object["_venueID"] != nil else {
@@ -166,13 +126,28 @@ public class APWDataManager : NSObject {
                             }
                             
                             
+                            guard countryObject?["_countryID"] != nil else {
+                                
+                                print("No Country ID Found")
+                                continue
+                                
+                            }
+
+                            
+                            guard countryObject?["_name"] != nil else {
+                                
+                                print("No Country Name Found")
+                                continue
+                                
+                            }
+                            
                             let countryId = countryObject?["_countryID"] as! String
                             
                             let countryName = countryObject?["_name"] as! String
                             
                             guard let country = Country(countryId: countryId, countryName: countryName) as Country? else {
                                 
-                                print("No Country Found")
+                                print("Country could Not Be Created")
                                 continue
                                 
                             }
@@ -187,21 +162,27 @@ public class APWDataManager : NSObject {
                             
                             let weatherHumidity = object["_weatherHumidity"] as! String?
                             
-                            var weatherTemp : Int?
+                            var weatherTemp : Int? = nil
                             
-                            if let weatherTempRaw = object["_weatherTemp"] as! String? {
+                            guard let weatherTempRaw = object["_weatherTemp"] as! String? else {
                                 
-                                weatherTemp = Int(weatherTempRaw)
+                                weatherTemp = 0
+                                continue
                                 
                             }
                             
-                            var weatherFeelsLike : Int?
+                            weatherTemp = Int(weatherTempRaw)
                             
-                            if let weatherFeelsLikeRaw = object["_weatherFeelsLike"] as! String? {
+                            var weatherFeelsLike : Int? = nil
+                            
+                            guard let weatherFeelsLikeRaw = object["_weatherFeelsLike"] as! String? else {
                                 
-                                weatherFeelsLike = Int(weatherFeelsLikeRaw)
+                                weatherFeelsLike = 0
+                                continue
                                 
                             }
+                            
+                            weatherFeelsLike = Int(weatherFeelsLikeRaw)
                             
                             var weatherLastUpdatedDate : NSDate
                             
@@ -217,6 +198,14 @@ public class APWDataManager : NSObject {
                                 
                             }
                             
+                            print("DEBUG:")
+                            print("\tCreating WeatherObject with the following values:")
+                            print("\t\tCondition:\t\(weatherConditions)")
+                            print("\t\tWind:\t\(weatherWind!)")
+                            print("\t\thumidity:\t\(weatherHumidity!)")
+                            print("\t\tTemp:\t\(weatherTemp!)")
+                            print("\t\tFeels Like:\t\(weatherFeelsLike!)")
+                            print("\t\tUpdated:\t\(weatherLastUpdatedDate)")
                             
                             guard let weather = Weather(condition: weatherConditions, wind: weatherWind, humidity: weatherHumidity, temp: weatherTemp, feelsLike: weatherFeelsLike, lastUpdatedDate: weatherLastUpdatedDate) as Weather? else {
                                 
@@ -225,78 +214,106 @@ public class APWDataManager : NSObject {
                                 
                             }
                             
-                            self.venues.append(Venue(venueId: venueId, venueName: venueName, venueCountry: country, venueSport: sport, venueWeather: weather))
-                        
+                            print("Creating Venue Object with the following details:")
+                            print("\tVenueID: \(venueId)")
+                            print("\tVenueName: \(venueName)")
+                            print("\tCountry: \(country)")
+                            print("\tSport: \(sport)")
+                            print("\tWeather: \(weather)")
+                            
+                            let venue = Venue(venueId: venueId, venueName: venueName, venueCountry: country, venueSport: sport, venueWeather: weather)
+                            
+                            print("Created Venue: \(venue)")
+  
+                            self.venues.append(venue)
+                            
                         }
                         
-                        
-                        self.lastRefreshedDate = NSDate()
-                        
+                        self.lastRequestedDate = NSDate()
                         
                     }
+                    
+                    self.postNotification("APWRequestCompletedSuccessfully", error: nil)
                     
                     
                 } catch let errorType {
                     
-                    self.error = NSError(domain: errorType._domain , code:errorType._code, userInfo:[NSLocalizedDescriptionKey : "Error Trying to write to file"])
+                    print("Something went wrong! Reason: \(errorType)")
                     
                 }
-
-                
                 
             }
             
-            
-        }
-
-        
-    }
-
-    
-    private func getDataFromFileWithSuccess(success: ((data: NSData) -> Void)) {
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            
-            let data = try! NSData(contentsOfFile:self.filePath!, options: NSDataReadingOptions.DataReadingUncached)
-            
-            success(data: data)
-        
-        })
-        
-    }
-    
-    public func loadDataFromURL(url: NSURL, completion:(data: NSData?, error: NSError?) -> Void) {
-        
-        let session = NSURLSession.sharedSession()
-        
-        let loadDataTask = session.dataTaskWithURL(url) { (data, response, error) -> Void in
-            
-            if let responseError = error {
-                
-                completion(data: nil, error: responseError)
-                
-            } else {
-                
-                if let httpResponse = response as? NSHTTPURLResponse {
-                    
-                    if httpResponse.statusCode != 200 {
-                        
-                        let statusError = NSError(domain:"net.cloudfront", code:httpResponse.statusCode, userInfo:[NSLocalizedDescriptionKey : "HTTP status code has unexpected value."])
-                        
-                        completion(data: nil, error: statusError)
-                        
-                    } else {
-                        
-                        completion(data: data, error: nil)
-                        
-                    }
-                }
-                
-            }
         }
         
-        loadDataTask.resume()
+        task.resume()
+    
+    }
+    
+    func postNotification(notificationName: String, error: NSError?) {
+    
+        
+        switch (notificationName) {
+            
+        case "APWRequestCompletedSuccessfully":
+            
+            let userInfoDict = [NSLocalizedDescriptionKey :  NSLocalizedString("Request Completed Successfully", value: "Request Completed Successfully!", comment: "")]
+            
+            NSNotificationCenter.defaultCenter().postNotificationName("APWRequestCompletedSuccessfully", object: self, userInfo: userInfoDict)
+            
+            
+        default:
+            
+            let userInfoDict = [NSLocalizedDescriptionKey :  NSLocalizedString("Unknown Error", value: "An unknown error has occured!", comment: "")]
+            
+            NSNotificationCenter.defaultCenter().postNotificationName("APWUnknownError", object: self, userInfo: userInfoDict)
+            
+            
+        }
         
     }
+    
+    //MARK: - Query Methods
+    
+    public func numberOfVenues() -> Int {
+        
+        return self.venues.count
+        
+    }
+    
+    public func venueAtIndex(index: Int) -> Venue? {
+        
+        if (index < venues.count-1) {
+            
+            return venues[index]
+            
+        } else {
+            
+            return nil
+            
+        }
+        
+    }
+
+
+    //MARK: - Singleton
+    
+    public class var sharedInstance: DataRequester {
+        
+        struct Singleton {
+            
+            static let instance = DataRequester()
+            
+        }
+        
+        return Singleton.instance
+        
+    }
+    
+    
+    
+    
+    
+
     
 }

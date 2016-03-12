@@ -15,18 +15,36 @@ public class Venue : CustomStringConvertible  {
     public var country : Country?
     public var sport : Sport?
     public var weather : Weather?
+    public var fullName : String {
+        
+        get {
+            
+            if (country != nil) {
+                
+                return "\(name), \((country?.name)!)"
+                
+            } else {
+                
+                return "\(name), Unknown Country"
+                
+            }
+            
+        }
+        
+    }
+    
+    
     
     public var description : String {
         
         get {
-            
             
             var countryDescription = "an Unknown Country"
             
             
             if (country != nil) {
                 
-                countryDescription = country!.name!
+                countryDescription = (country?.name)!
                 
             }
             
@@ -58,7 +76,6 @@ public class Venue : CustomStringConvertible  {
         
         self.id = venueId
         self.name = venueName
-        
         self.country = venueCountry
         self.sport = venueSport
         self.weather = venueWeather

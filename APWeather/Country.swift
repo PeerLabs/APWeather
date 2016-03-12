@@ -15,28 +15,19 @@ public struct Country : CustomStringConvertible {
     //    "_name": "Australia"
     
     public var id : String
-    
-    public var name : String?
+    public var name : String
     
     public var description : String {
         
         get {
             
-            if (name == nil) {
-                
-                return "Unkown Country with \(id)."
-                
-            } else {
-                
-                return "Country \(name!) with \(id)."
-                
-            }
+            return "Country \(name) with \(id)."
             
         }
         
     }
     
-    public init(countryId: String, countryName: String?) {
+    public init(countryId: String, countryName: String) {
         
         self.id = countryId
         self.name = countryName

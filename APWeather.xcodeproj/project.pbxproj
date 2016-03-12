@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5B0A90F71C8F092900DB77D7 /* APWDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0A90F61C8F092900DB77D7 /* APWDataManager.swift */; };
 		5B0A90F91C8F0BD200DB77D7 /* Venue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0A90F81C8F0BD200DB77D7 /* Venue.swift */; };
 		5B0A90FB1C8F0BE100DB77D7 /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0A90FA1C8F0BE100DB77D7 /* Country.swift */; };
 		5B0A90FD1C8F0BF300DB77D7 /* Sport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0A90FC1C8F0BF300DB77D7 /* Sport.swift */; };
@@ -20,6 +19,7 @@
 		5B19EAAA1C8D52DA0057ACCE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B19EAA81C8D52DA0057ACCE /* LaunchScreen.storyboard */; };
 		5B19EAB51C8D52DA0057ACCE /* APWeatherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B19EAB41C8D52DA0057ACCE /* APWeatherTests.swift */; };
 		5B19EAC01C8D52DA0057ACCE /* APWeatherUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B19EABF1C8D52DA0057ACCE /* APWeatherUITests.swift */; };
+		5B3F037C1C92A62A003940D6 /* DataRequester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B3F037B1C92A62A003940D6 /* DataRequester.swift */; };
 		5BAAD8FD1C8EA4A600060ACB /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BAAD8FC1C8EA4A600060ACB /* MasterViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -42,7 +42,6 @@
 
 /* Begin PBXFileReference section */
 		5B0A90F31C8EC66A00DB77D7 /* data.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = data.json; sourceTree = "<group>"; };
-		5B0A90F61C8F092900DB77D7 /* APWDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APWDataManager.swift; sourceTree = "<group>"; };
 		5B0A90F81C8F0BD200DB77D7 /* Venue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Venue.swift; sourceTree = "<group>"; };
 		5B0A90FA1C8F0BE100DB77D7 /* Country.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
 		5B0A90FC1C8F0BF300DB77D7 /* Sport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sport.swift; sourceTree = "<group>"; };
@@ -61,6 +60,7 @@
 		5B19EABB1C8D52DA0057ACCE /* APWeatherUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APWeatherUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B19EABF1C8D52DA0057ACCE /* APWeatherUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APWeatherUITests.swift; sourceTree = "<group>"; };
 		5B19EAC11C8D52DA0057ACCE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5B3F037B1C92A62A003940D6 /* DataRequester.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataRequester.swift; sourceTree = "<group>"; };
 		5BAAD8FC1C8EA4A600060ACB /* MasterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -111,7 +111,7 @@
 		5B0A90F51C8F091400DB77D7 /* API */ = {
 			isa = PBXGroup;
 			children = (
-				5B0A90F61C8F092900DB77D7 /* APWDataManager.swift */,
+				5B3F037B1C92A62A003940D6 /* DataRequester.swift */,
 			);
 			name = API;
 			sourceTree = "<group>";
@@ -306,11 +306,11 @@
 				5B0A90FB1C8F0BE100DB77D7 /* Country.swift in Sources */,
 				5BAAD8FD1C8EA4A600060ACB /* MasterViewController.swift in Sources */,
 				5B0A90F91C8F0BD200DB77D7 /* Venue.swift in Sources */,
-				5B0A90F71C8F092900DB77D7 /* APWDataManager.swift in Sources */,
 				5B0A90FF1C8F0C0200DB77D7 /* Weather.swift in Sources */,
 				5B19EAA21C8D52DA0057ACCE /* DetailViewController.swift in Sources */,
 				5B19EAA01C8D52DA0057ACCE /* OldMasterViewController.swift in Sources */,
 				5B0A90FD1C8F0BF300DB77D7 /* Sport.swift in Sources */,
+				5B3F037C1C92A62A003940D6 /* DataRequester.swift in Sources */,
 				5B19EA9E1C8D52DA0057ACCE /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

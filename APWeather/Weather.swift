@@ -21,9 +21,55 @@ public struct Weather : CustomStringConvertible {
     public var conditionIcon : String
     public var wind : String?
     public var humidity : String?
-    public var temp : Int?
-    public var feelsLike : Int?
+    public var tempValue : Int?
+    public var temperature : String {
+        
+        get {
+            
+            if (tempValue != nil) {
+
+                return "\(tempValue!)ºC"
+            
+            } else {
+                
+                return "Unknown Temp"
+                
+            }
+            
+        }
+        
+    }
+    public var feelsLikeValue : Int?
+    
+    public var feelsLike : String {
+        
+        get {
+            
+            if (feelsLikeValue != nil) {
+                
+                return "\(feelsLikeValue!)ºC"
+                
+            } else{
+                
+                return "Unknown"
+                
+            }
+            
+        }
+        
+    }
+    
     public var lastUpdatedDate : NSDate
+    
+    public var lastUpdatedDateString : String {
+        
+        get {
+            
+            return self.dateFormatter.stringFromDate(lastUpdatedDate)
+            
+        }
+        
+    }
     
     public var description : String {
         
@@ -53,25 +99,26 @@ public struct Weather : CustomStringConvertible {
                 
             }
             
-            if (temp != nil) {
+            if (tempValue != nil) {
                 
-                tempDesc = "the temperature is \(temp!)℃"
-                
-            }
-            
-            if (feelsLike != nil) {
-                
-                
-                feelsLikeDesc = "it feels like \(feelsLike!)℃"
+                tempDesc = "the temperature is \(tempValue!)℃"
                 
             }
             
-            return  "\(conditionDesc), with \(windDesc), \(tempDesc), \(humidityDesc) and \(feelsLikeDesc)"
+            if (feelsLikeValue != nil) {
+                
+                
+                feelsLikeDesc = "it feels like \(feelsLikeValue!)℃"
+                
+            }
+            
+            return  "\(conditionDesc), with \(windDesc), \(tempDesc), \(humidityDesc) and \(feelsLikeDesc). Last Updated: \(lastUpdatedDateString)."
             
         }
         
     }
     
+    private let dateFormatter : NSDateFormatter
     
     public init(condition: String?, wind: String?, humidity: String?, temp: Int?, feelsLike : Int?, lastUpdatedDate: NSDate) {
         
@@ -169,7 +216,16 @@ public struct Weather : CustomStringConvertible {
             
         }
         
+        self.tempValue = temp
+        
+        self.feelsLikeValue = feelsLike
+        
         self.lastUpdatedDate = lastUpdatedDate
+        
+        let df = NSDateFormatter()
+        df.dateStyle = NSDateFormatterStyle.LongStyle
+        
+        self.dateFormatter = df
         
         
     }
