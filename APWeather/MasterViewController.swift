@@ -335,9 +335,82 @@ class MasterViewController: UIViewController, UITableViewDataSource/*, UITableVi
     
     func requestData() {
         
+        #if DEBUG
+            
+            print("[\(__FILE__) : \(__FUNCTION__)] Started!")
+            
+        #endif
+        
         dataRequester?.requestData()
         
+        #if DEBUG
+            
+            print("[\(__FILE__) : \(__FUNCTION__)] Finished!")
+            
+        #endif
+        
     }
+    
+    //MARK: Error AlertViewController
+    
+    @IBAction func showAlertViewController(sender: UIBarButtonItem) {
+        
+        #if DEBUG
+            
+            print("[\(__FILE__) : \(__FUNCTION__)] Started!")
+            
+        #endif
+        
+        if (self.presentedViewController != nil) {
+            
+            self.dismissViewControllerAnimated(true, completion: {
+                
+                let alertTitle = "APWeather - Action Not Supported!"
+                
+                let alertMessage = "Sorry this feature is not yet supported!"
+                
+                
+                let alertControler = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: UIAlertControllerStyle.Alert)
+                
+                let retryAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: {(alert: UIAlertAction!) in
+                    
+                    
+                })
+                
+                alertControler.addAction(retryAction)
+                
+                self.presentViewController(alertControler, animated: true, completion: nil)
+                
+            })
+            
+        } else {
+            
+            let alertTitle = "APWeather - Action Not Supported!"
+            
+            let alertMessage = "Sorry this feature is not yet supported!"
+            
+            
+            let alertControler = UIAlertController(title: alertTitle, message: alertMessage, preferredStyle: UIAlertControllerStyle.Alert)
+            
+            let retryAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: {(alert: UIAlertAction!) in
+                
+                
+            })
+            
+            alertControler.addAction(retryAction)
+            
+            self.presentViewController(alertControler, animated: true, completion: nil)
+            
+        }
+        
+        #if DEBUG
+            
+            print("[\(__FILE__) : \(__FUNCTION__)] Finished!")
+            
+        #endif
+        
+    }
+
     
 }
 

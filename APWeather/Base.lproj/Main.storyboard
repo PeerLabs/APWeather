@@ -132,8 +132,16 @@
                     </view>
                     <navigationItem key="navigationItem" title="Venues" id="aU9-H5-QWo">
                         <rightBarButtonItems>
-                            <barButtonItem image="filter" id="pGt-9w-MQV"/>
-                            <barButtonItem image="sort" id="4Df-Ia-TtK"/>
+                            <barButtonItem image="filter" id="pGt-9w-MQV">
+                                <connections>
+                                    <action selector="showAlertViewController:" destination="wq5-1X-Kzh" id="PyI-9b-5gu"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="sort" id="4Df-Ia-TtK">
+                                <connections>
+                                    <action selector="showAlertViewController:" destination="wq5-1X-Kzh" id="VHl-rT-eYX"/>
+                                </connections>
+                            </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
