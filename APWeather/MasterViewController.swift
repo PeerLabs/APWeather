@@ -15,6 +15,8 @@ class MasterViewController: UIViewController, UITableViewDataSource/*, UITableVi
     
     @IBOutlet weak var lastUpdatedLabel: UILabel!
     
+    var refreshControl: UIRefreshControl!
+    
     var detailViewController: DetailViewController? = nil
 
     var dataRequester : DataRequester? = nil
@@ -37,7 +39,12 @@ class MasterViewController: UIViewController, UITableViewDataSource/*, UITableVi
         //tableView.delegate = self
         tableView.dataSource = self
         
-        dataRequester?.requestData()
+        self.refreshControl = UIRefreshControl()
+        self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to Request Data!")
+        self.refreshControl.addTarget(self, action: "requestData", forControlEvents: UIControlEvents.ValueChanged)
+        self.tableView.addSubview(self.refreshControl)
+        
+        self.requestData()
         
                 
         #if DEBUG
@@ -72,6 +79,8 @@ class MasterViewController: UIViewController, UITableViewDataSource/*, UITableVi
 
         
     }
+    
+    //MARK: Register Notification Observers
     
     func registerNotificationObservers() {
         
@@ -155,33 +164,27 @@ class MasterViewController: UIViewController, UITableViewDataSource/*, UITableVi
         
         tableView.hidden = false
         
-        guard let lastReqDate = dataRequester?.lastRequestedDate else {
+        var lastUpdatedText = "Uknown Requested Date"
+        
+        if let lastReqDate = dataRequester?.lastRequestedDate {
             
-            lastUpdatedLabel.text = "Uknown Requested Date"
+            let df = NSDateFormatter()
+            df.dateStyle = NSDateFormatterStyle.LongStyle
+            df.timeStyle = NSDateFormatterStyle.ShortStyle
             
-            #if DEBUG
-                
-                print("[\(__FILE__) : \(__FUNCTION__)] Finished!")
-                
-            #endif
-            
-            return
+            lastUpdatedText = "Data Last Fetched: \(df.stringFromDate(lastReqDate))"
             
         }
         
-        let df = NSDateFormatter()
-        df.dateStyle = NSDateFormatterStyle.LongStyle
         
         dispatch_async(dispatch_get_main_queue(), {
             
             self.tableView.reloadData()
-            self.lastUpdatedLabel.text = "Data Last Fetched: \(df.stringFromDate(lastReqDate))"
+            self.lastUpdatedLabel.text = lastUpdatedText
             self.tableView.selectRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.Top)
+            self.refreshControl.endRefreshing()
             
         })
-
-        
-        
         
         #if DEBUG
             
@@ -325,6 +328,14 @@ class MasterViewController: UIViewController, UITableViewDataSource/*, UITableVi
         
         return "Venues (A-Z)"
 
+        
+    }
+    
+    //MARK: Request Data Methods
+    
+    func requestData() {
+        
+        dataRequester?.requestData()
         
     }
     
