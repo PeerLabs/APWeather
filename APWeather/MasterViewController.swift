@@ -10,9 +10,10 @@ import UIKit
 
 class MasterViewController: UIViewController, UITableViewDataSource/*, UITableViewDelegate */ {
     
-    @IBOutlet weak var animator: UIActivityIndicatorView!
     
     @IBOutlet weak var tableView: UITableView!
+    
+    @IBOutlet weak var lastUpdatedLabel: UILabel!
     
     var detailViewController: DetailViewController? = nil
 
@@ -36,6 +37,8 @@ class MasterViewController: UIViewController, UITableViewDataSource/*, UITableVi
         //tableView.delegate = self
         tableView.dataSource = self
         
+        dataRequester?.requestData()
+        
                 
         #if DEBUG
             
@@ -58,9 +61,7 @@ class MasterViewController: UIViewController, UITableViewDataSource/*, UITableVi
         
 //        dataManager?.requestData()
         
-        dataRequester?.requestData()
-        
-        startDownloadAnimator()
+//        startDownloadAnimator()
         
         
         #if DEBUG
@@ -142,6 +143,8 @@ class MasterViewController: UIViewController, UITableViewDataSource/*, UITableVi
         
     }
     
+    //MARK: Request Completion
+    
     func successfullyCompletedRequest() {
         
         #if DEBUG
@@ -150,18 +153,36 @@ class MasterViewController: UIViewController, UITableViewDataSource/*, UITableVi
             
         #endif
         
-        animator.stopAnimating()
-        
-        animator.hidden = true
-        
         tableView.hidden = false
+        
+        guard let lastReqDate = dataRequester?.lastRequestedDate else {
+            
+            lastUpdatedLabel.text = "Uknown Requested Date"
+            
+            #if DEBUG
+                
+                print("[\(__FILE__) : \(__FUNCTION__)] Finished!")
+                
+            #endif
+            
+            return
+            
+        }
+        
+        let df = NSDateFormatter()
+        df.dateStyle = NSDateFormatterStyle.LongStyle
         
         dispatch_async(dispatch_get_main_queue(), {
             
             self.tableView.reloadData()
+            self.lastUpdatedLabel.text = "Data Last Fetched: \(df.stringFromDate(lastReqDate))"
+            self.tableView.selectRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.Top)
             
         })
 
+        
+        
+        
         #if DEBUG
             
             print("[\(__FILE__) : \(__FUNCTION__)] Finished!")
@@ -169,26 +190,31 @@ class MasterViewController: UIViewController, UITableViewDataSource/*, UITableVi
         #endif
         
     }
-
     
-    func startDownloadAnimator() {
+    
+    // MARK: - Segues
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        #if DEBUG
-            
-            print("[\(__FILE__) : \(__FUNCTION__)] Started!")
-            
-        #endif
+        print("Segue Id = \(segue.identifier)")
         
-        self.tableView.hidden = true
-        
-        self.animator?.startAnimating()
-        
-        #if DEBUG
-            
-            print("[\(__FILE__) : \(__FUNCTION__)] Finished!")
-            
-        #endif
-        
+        if segue.identifier == "showVenue" {
+            if let indexPath = self.tableView.indexPathForSelectedRow {
+                
+                print("Selected IndexPath = \(indexPath)")
+                
+                if let venue = dataRequester?.venueAtIndex(indexPath.row) {
+                    
+                    let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
+                    controller.venue = venue
+                    controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+                    controller.navigationItem.leftItemsSupplementBackButton = true
+                    
+                    
+                }
+               
+            }
+        }
     }
 
     // MARK: UITableViewDataSource Methods
@@ -278,8 +304,28 @@ class MasterViewController: UIViewController, UITableViewDataSource/*, UITableVi
         #endif
         
         return cell
-        
 
+    }
+    
+    
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        
+        
+        #if DEBUG
+            
+            print("[\(__FILE__) : \(__FUNCTION__)] Started!")
+            
+        #endif
+        
+        #if DEBUG
+            
+            print("[\(__FILE__) : \(__FUNCTION__)] Finished!")
+            
+        #endif
+        
+        return "Venues (A-Z)"
+
+        
     }
     
 }

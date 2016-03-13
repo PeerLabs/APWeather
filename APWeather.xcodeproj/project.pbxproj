@@ -12,7 +12,6 @@
 		5B0A90FD1C8F0BF300DB77D7 /* Sport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0A90FC1C8F0BF300DB77D7 /* Sport.swift */; };
 		5B0A90FF1C8F0C0200DB77D7 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0A90FE1C8F0C0200DB77D7 /* Weather.swift */; };
 		5B19EA9E1C8D52DA0057ACCE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B19EA9D1C8D52DA0057ACCE /* AppDelegate.swift */; };
-		5B19EAA01C8D52DA0057ACCE /* OldMasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B19EA9F1C8D52DA0057ACCE /* OldMasterViewController.swift */; };
 		5B19EAA21C8D52DA0057ACCE /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B19EAA11C8D52DA0057ACCE /* DetailViewController.swift */; };
 		5B19EAA51C8D52DA0057ACCE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5B19EAA31C8D52DA0057ACCE /* Main.storyboard */; };
 		5B19EAA71C8D52DA0057ACCE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5B19EAA61C8D52DA0057ACCE /* Assets.xcassets */; };
@@ -48,7 +47,6 @@
 		5B0A90FE1C8F0C0200DB77D7 /* Weather.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		5B19EA9A1C8D52DA0057ACCE /* APWeather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = APWeather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B19EA9D1C8D52DA0057ACCE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		5B19EA9F1C8D52DA0057ACCE /* OldMasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldMasterViewController.swift; sourceTree = "<group>"; };
 		5B19EAA11C8D52DA0057ACCE /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		5B19EAA41C8D52DA0057ACCE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5B19EAA61C8D52DA0057ACCE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -143,7 +141,6 @@
 				5B0A90F41C8F087400DB77D7 /* Model */,
 				5B0A90F21C8EC62400DB77D7 /* Resources */,
 				5B19EA9D1C8D52DA0057ACCE /* AppDelegate.swift */,
-				5B19EA9F1C8D52DA0057ACCE /* OldMasterViewController.swift */,
 				5B19EAA11C8D52DA0057ACCE /* DetailViewController.swift */,
 				5B19EAA31C8D52DA0057ACCE /* Main.storyboard */,
 				5B19EAA61C8D52DA0057ACCE /* Assets.xcassets */,
@@ -308,7 +305,6 @@
 				5B0A90F91C8F0BD200DB77D7 /* Venue.swift in Sources */,
 				5B0A90FF1C8F0C0200DB77D7 /* Weather.swift in Sources */,
 				5B19EAA21C8D52DA0057ACCE /* DetailViewController.swift in Sources */,
-				5B19EAA01C8D52DA0057ACCE /* OldMasterViewController.swift in Sources */,
 				5B0A90FD1C8F0BF300DB77D7 /* Sport.swift in Sources */,
 				5B3F037C1C92A62A003940D6 /* DataRequester.swift in Sources */,
 				5B19EA9E1C8D52DA0057ACCE /* AppDelegate.swift in Sources */,
